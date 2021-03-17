@@ -3,6 +3,8 @@
     display: grid;
     grid-template-rows: 3em 3em auto;
     position: absolute;
+    overflow-y: auto;
+    height: calc(100vh - 5rem);
 }
 
     .calendar_container .title {
@@ -21,3 +23,10 @@
             left: 0.5rem;
             transform: translateY(-50%);
         }
+
+    .calendar_container .row {
+        display: unset;
+        flex-wrap: unset;
+        margin-right: unset; 
+        margin-left: unset;
+    }

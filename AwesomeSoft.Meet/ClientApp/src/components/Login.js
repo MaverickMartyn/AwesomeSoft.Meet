@@ -1,7 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { Button, Form, FormGroup, Label, Input, Row, Col } from 'reactstrap';
 import axios from 'axios';
-import cookie from 'react-cookies'
 
 export class Login extends Component {
     constructor(props) {
@@ -35,7 +34,7 @@ export class Login extends Component {
     render() {
         return (
             <Row>
-                <Col>
+                <Col md={{ size: '6', offset: 3 }}>
                     <Form>
                         <FormGroup>
                             <Label for="username">Email</Label>
@@ -50,7 +49,6 @@ export class Login extends Component {
                         </Button>
                     </Form>
                 </Col>
-                <Col></Col>
             </Row>
         );
     }

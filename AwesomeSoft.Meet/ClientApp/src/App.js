@@ -13,15 +13,10 @@ import cookie from 'react-cookies'
 import './custom.css'
 
 export default class App extends Component {
-    static displayName = App.name;
-
-    constructor() {
-        super()
-        this.setState({ user: cookie.load("user") })
-    }
+  static displayName = App.name;
 
   state = {
-    user: null
+    user: cookie.load("user")
   }
 
   authChangeHandler(user) {

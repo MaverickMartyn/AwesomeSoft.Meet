@@ -25,7 +25,7 @@ export class NavMenu extends Component {
   render() {
     const logoutLink = 
       <NavItem>
-        <NavLink tag={Link} className="text-dark" onClick={this.props.onLogout}>Logout</NavLink>
+        <NavLink className="text-dark" onClick={this.props.onLogout}>Logout</NavLink>
       </NavItem>
     return (
       <header>
