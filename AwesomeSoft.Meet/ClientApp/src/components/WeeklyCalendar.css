@@ -1,0 +1,114 @@
+.calendar_container .days {
+    background: #f3f2f1;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    grid-template-columns: 3em 10px repeat(7, 1fr);
+    position: sticky;
+    top: 3em;
+    z-index: 10;
+    border-bottom: 2px solid #dadce0;
+}
+
+.calendar_container .day {
+    border-left: 1px solid #dadce0;
+}
+
+.calendar_container .content {
+    display: grid;
+    grid-template-columns: 3em 10px repeat(7, 1fr);
+    grid-template-rows: repeat(24, 3em);
+}
+
+.calendar_container .time {
+    grid-column: 1;
+    text-align: right;
+    align-self: end;
+    font-size: 80%;
+    position: relative;
+    bottom: -1ex;
+    color: #70757a;
+    padding-right: 2px;
+}
+
+.calendar_container .col {
+    border-right: 1px solid #dadce0;
+    grid-row: 1/span 24;
+    grid-column: span 1;
+}
+
+.calendar_container .filler-col {
+    grid-row: 1/-1;
+    grid-column: 2;
+    border-right: 1px solid #dadce0;
+}
+
+.calendar_container .row {
+    grid-column: 2/-1;
+    border-bottom: 1px solid #dadce0;
+}
+
+.calendar_container .event {
+    border-radius: 5px;
+    padding: 5px;
+    margin-right: 10px;
+    font-weight: bold;
+    font-size: 80%;
+}
+
+.calendar_container .weekend {
+    background-color: #f1f3f4;
+}
+
+.calendar_container .calendar1 {
+    background-color: #d7dbef;
+    border-color: #bcc3e5;
+}
+
+.calendar_container .calendar2 {
+    background-color: #b3e1f7;
+    border-color: #81cdf2;
+}
+
+.calendar_container .event1 {
+    grid-column: 3;
+    grid-row: 9/span 4;
+}
+
+.calendar_container .event2 {
+    grid-column: 5;
+    grid-row: 10/span 6;
+}
+
+.calendar_container .event3 {
+    grid-column: 7;
+    grid-row: 8/span 10;
+}
+
+.calendar_container .event4 {
+    grid-column: 8;
+    grid-row: 21/span 2;
+}
+
+.calendar_container .current-time {
+    grid-column: 7;
+    grid-row: 10;
+    border-top: 2px solid #ea4335;
+    position: relative;
+    top: calc(50% - 1px);
+}
+
+.calendar_container .circle {
+    width: 12px;
+    height: 12px;
+    border: 1px solid #ea4335;
+    border-radius: 50%;
+    background: #ea4335;
+    position: relative;
+    top: -6px;
+    left: -6px;
+}
+
+.calendar_container .current {
+    font-weight: bold;
+}
