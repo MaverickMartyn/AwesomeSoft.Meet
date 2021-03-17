@@ -17,7 +17,7 @@ export class Login extends Component {
     }
 
     loginHandler() {
-        axios.post("/Users/Authenticate", this.state).then((resp) => {
+        axios.post("api/Users/Authenticate", this.state).then((resp) => {
             this.props.onAuthChange(resp.data)
             this.props.history.push("/")
         })

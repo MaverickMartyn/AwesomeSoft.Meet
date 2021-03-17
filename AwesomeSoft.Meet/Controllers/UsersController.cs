@@ -30,7 +30,7 @@ namespace AwesomeSoft.Meet.Controllers
         /// <returns>A <see cref="AuthenticateResponse"/> containing user information and JWToken.</returns>
         /// <response code="200">On a successful authentication.</response>
         /// <response code="400">Failed to authenticate.</response>
-        [HttpPost("[controller]/[action]")]
+        [HttpPost("api/[controller]/[action]")]
         [ProducesResponseType(typeof(AuthenticateResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Authenticate(AuthenticateRequest model)
@@ -49,7 +49,7 @@ namespace AwesomeSoft.Meet.Controllers
         /// <returns>A list of all <see cref="User"/> instances.</returns>
         /// <response code="200">Success.</response>
         [Authorize]
-        [HttpGet("[controller]")]
+        [HttpGet("api/[controller]")]
         [ProducesResponseType(typeof(IEnumerable<User>), StatusCodes.Status200OK)]
         public IActionResult Get()
         {
@@ -63,7 +63,7 @@ namespace AwesomeSoft.Meet.Controllers
         /// <response code="200">Success.</response>
         /// <response code="404">Not found.</response>
         [Authorize]
-        [HttpGet("[controller]/{id?}")]
+        [HttpGet("api/[controller]/{id?}")]
         [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         public IActionResult Get(uint id)
         {

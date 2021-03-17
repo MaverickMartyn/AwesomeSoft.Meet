@@ -17,6 +17,8 @@ namespace AwesomeSoft.Meet
 
         public List<User> Users { get; set; }
 
+        public List<Room> Rooms { get; set; }
+
         public static DummyData Instance {
             get
             {
@@ -43,6 +45,29 @@ namespace AwesomeSoft.Meet
                     Name = "User2"
                 }
             };
+            Rooms = new List<Room>()
+            {
+                new Room()
+                {
+                    Id = 1,
+                    Name = "Meeting Room 1"
+                },
+                new Room()
+                {
+                    Id = 2,
+                    Name = "Meeting Room 2"
+                },
+                new Room()
+                {
+                    Id = 3,
+                    Name = "Large Meeting Room 1"
+                },
+                new Room()
+                {
+                    Id = 4,
+                    Name = "Office 1"
+                }
+            };
             Meetings = new List<Meeting>()
             {
                 new Meeting() {
@@ -50,6 +75,7 @@ namespace AwesomeSoft.Meet
                     Title = "Test meeting 1",
                     Description = "This is just a test meeting.\nNothing to see here.",
                     Owner = Users.First(),
+                    Room = Rooms.First()
                 },
                 new Meeting() {
                     Id = 2,
@@ -59,7 +85,8 @@ namespace AwesomeSoft.Meet
                     Participants = new List<User>()
                     {
                         Users.First()
-                    }
+                    },
+                    Room = Rooms.Last()
                 }
             };
         }

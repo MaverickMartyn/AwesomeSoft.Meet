@@ -27,6 +27,9 @@ namespace AwesomeSoft.Meet.Models.ViewModels
         [Required]
         public DateTime EndTime { get; set; }
 
+        [Required]
+        public uint RoomId { get; set; }
+
         public IEnumerable<Participant> Participants { get; set; }
     }
 }

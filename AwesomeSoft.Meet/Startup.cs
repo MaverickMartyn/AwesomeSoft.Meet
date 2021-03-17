@@ -60,6 +60,7 @@ namespace AwesomeSoft.Meet
             // Add User service.
             services.AddScoped<IUserService, UserService>();
             services.AddSingleton<MeetingService>(); // Added as singleton to preserve state.
+            services.AddSingleton<RoomService>(); // Added as singleton to preserve state.
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>(); //Makes HttpContext available as a service.
 
             services.AddRazorPages();

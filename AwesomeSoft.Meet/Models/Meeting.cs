@@ -18,6 +18,8 @@ namespace AwesomeSoft.Meet.Models
 
         public List<User> Participants { get; set; } = new List<User>();
 
+        public Room Room { get; set; }
+
         public DateTime StartTime { get; set; }
 
         public DateTime EndTime { get; set; }

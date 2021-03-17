@@ -7,7 +7,7 @@
     height: calc(100vh - 5rem);
 }
 
-    .calendar_container .title {
+    .calendar_container > .title {
         background: #217346;
         text-align: center;
         display: grid;
@@ -17,7 +17,7 @@
         top: 0;
         z-index: 10;
     }
-        .calendar_container .title select {
+        .calendar_container > .title select {
             position: absolute;
             top: 50%;
             left: 0.5rem;

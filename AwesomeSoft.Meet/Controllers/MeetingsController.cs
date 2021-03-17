@@ -38,18 +38,21 @@ namespace AwesomeSoft.Meet.Controllers
         /// <summary>
         /// Gets all the current users scheduled Meetings.
         /// </summary>
+        /// <param name="startTime">The start search date (inclusive).</param>
+        /// <param name="endTime">The end search date (inclusive).</param>
         /// <returns>A collection of Meetings.</returns>
-        [HttpGet("[controller]")]
+        [HttpGet("api/[controller]/{startTime}/{endTime}")]
         [ProducesResponseType(typeof(IEnumerable<Meeting>), StatusCodes.Status200OK)]
-        public IActionResult Get()
+        public IActionResult Get(DateTime startTime, DateTime endTime)
         {
-            return Ok(_meetingService.GetMeetings(_userService.GetCurrentUser()));
+            return Ok(_meetingService.GetMeetings(_userService.GetCurrentUser()).Where(m => (m.StartTime >= startTime && m.StartTime <= endTime) || (m.EndTime >= startTime && m.EndTime <= endTime)));
         }
+
         /// <summary>
         /// Gets all the current users scheduled Meetings.
         /// </summary>
-        /// <returns>A collection of Meetings.</returns>
-        [HttpGet("[controller]/{id?}")]
+        /// <returns>The requested Meeting.</returns>
+        [HttpGet("api/[controller]/{id?}")]
         [ProducesResponseType(typeof(Meeting), StatusCodes.Status200OK)]
         public IActionResult Get(uint id)
         {
@@ -72,13 +75,13 @@ namespace AwesomeSoft.Meet.Controllers
         /// Creates a new Meeting.
         /// </summary>
         /// <param name="model">The meeting data.</param>
-        /// <returns>Returns the finsihed Meeting along with its ID.</returns>
+        /// <returns>Returns the finished Meeting along with its ID.</returns>
         /// <response code="201">On a successful creation.</response>
         /// <response code="400">Data was malformed or otherwise invalid.</response>
-        [HttpPost("[controller]")]
+        [HttpPost("api/[controller]")]
         [ProducesResponseType(typeof(Meeting), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Add(AddMeetingViewModel model)
+        public IActionResult Post(AddMeetingViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -106,11 +109,11 @@ namespace AwesomeSoft.Meet.Controllers
         /// <response code="404">If the <see cref="Meeting"/> was not found.</response>
         /// <response code="401">If the <see cref="Meeting"/> is not owned by the current user.</response>
         /// <response code="400">Data was malformed or otherwise invalid.</response>
-        [HttpPut("[controller]/{id?}")]
+        [HttpPut("api/[controller]/{id?}")]
         [ProducesResponseType(typeof(Meeting), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Edit(uint id, EditMeetingViewModel model)
+        public IActionResult Put(uint id, EditMeetingViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -142,7 +145,7 @@ namespace AwesomeSoft.Meet.Controllers
         /// <response code="204">On a successful deletion.</response>
         /// <response code="404">If the <see cref="Meeting"/> was not found.</response>
         /// <response code="401">If the <see cref="Meeting"/> is not owned by the current user.</response>
-        [HttpDelete("[controller]/{id?}")]
+        [HttpDelete("api/[controller]/{id?}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult Delete(uint id)
@@ -165,7 +168,7 @@ namespace AwesomeSoft.Meet.Controllers
         /// Gets the current users conflicting Meetings.
         /// </summary>
         /// <returns>A list of <see cref="Conflict"/> objects for every Meeting conflict.</returns>
-        [HttpGet("[controller]/[action]")]
+        [HttpGet("api/[controller]/[action]")]
         [ProducesResponseType(typeof(IEnumerable<Conflict>), StatusCodes.Status200OK)]
         public IActionResult Conflicts()
         {
