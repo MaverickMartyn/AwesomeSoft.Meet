@@ -55,6 +55,7 @@
     font-size: 80%;
     overflow-y: hidden;
     z-index: 9;
+    border: 1px solid;
 }
 
 .calendar_container .event .title {
@@ -74,14 +75,14 @@
     background-color: #f1f3f4;
 }
 
-.calendar_container .calendar1 {
+.calendar_container .calendar {
     background-color: #d7dbef;
     border-color: #bcc3e5;
 }
 
-.calendar_container .calendar2 {
-    background-color: #b3e1f7;
-    border-color: #81cdf2;
+.calendar_container .conflict {
+    background-color: #ff6363;
+    border-color: #f28181;
 }
 
 .calendar_container .current-time {

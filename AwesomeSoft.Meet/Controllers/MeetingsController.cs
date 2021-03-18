@@ -48,7 +48,7 @@ namespace AwesomeSoft.Meet.Controllers
         [ProducesResponseType(typeof(IEnumerable<Meeting>), StatusCodes.Status200OK)]
         public IActionResult Get(DateTime startTime, DateTime endTime)
         {
-            return Ok(_meetingService.GetMeetings(_userService.GetCurrentUser()).Where(m => (m.StartTime >= startTime && m.StartTime <= endTime) || (m.EndTime >= startTime && m.EndTime <= endTime)));
+            return Ok(_meetingService.CheckForConflicts(_meetingService.GetMeetings(_userService.GetCurrentUser(), startTime, endTime)));
         }
 
         /// <summary>
@@ -167,17 +167,6 @@ namespace AwesomeSoft.Meet.Controllers
             }
             _meetingService.Delete(meeting);
             return NoContent();
-        }
-
-        /// <summary>
-        /// Gets the current users conflicting Meetings.
-        /// </summary>
-        /// <returns>A list of <see cref="Conflict"/> objects for every Meeting conflict.</returns>
-        [HttpGet("api/[controller]/[action]")]
-        [ProducesResponseType(typeof(IEnumerable<Conflict>), StatusCodes.Status200OK)]
-        public IActionResult Conflicts()
-        {
-            return Ok(_meetingService.GetConflicts(_userService.GetCurrentUser()));
         }
         #endregion
     }

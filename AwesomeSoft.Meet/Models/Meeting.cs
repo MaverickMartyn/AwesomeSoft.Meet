@@ -23,5 +23,7 @@ namespace AwesomeSoft.Meet.Models
         public DateTime StartTime { get; set; }
 
         public DateTime EndTime { get; set; }
+
+        public IEnumerable<uint> ConflictingIds { get; set; }
     }
 }

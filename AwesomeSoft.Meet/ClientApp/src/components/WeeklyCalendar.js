@@ -71,8 +71,12 @@ export class WeeklyCalendar extends Component {
             let timeSpan = (end.hour() - start.hour());
             events.push(
                 <div key={i}
-                    className="event calendar1"
-                    style={{ gridColumn: start.isoWeekday() + 2, gridRow: ((start.hour() + 1) + "/span " + timeSpan) }}>
+                    className={'event calendar' + ((event.conflictingIds && event.conflictingIds.length > 0) ? ' conflict' : '') }
+                    style={{
+                        gridColumn: start.isoWeekday() + 2,
+                        gridRow: ((start.hour() + 1) + "/span " + timeSpan),
+                        width: ((event.conflictingIds && event.conflictingIds.length > 0) ? 100 / (event.conflictingIds.length + 1) + '%' : '100%')
+                    }}>
                     <span className="title">{event.title}</span><span className="buttons"><BsPencilSquare onClick={() => this.editEvent(event)} /><BsFillTrashFill onClick={() => this.onEventDeleted(event)} /></span>
                     <p>Room: {event.room && event.room.name}</p>
                     <p>{event.description}</p>

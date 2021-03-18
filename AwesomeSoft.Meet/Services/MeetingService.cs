@@ -14,9 +14,24 @@ namespace AwesomeSoft.Meet.Services
         private Random rand = new Random();
 
         #region Methods
+        /// <summary>
+        /// Returns all <see cref="Meeting"/>s owned by or attended by this user.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <returns>A List of all <see cref="Meeting"/>s attended by this user.</returns>
         public List<Meeting> GetMeetings(User user)
         {
             return meetings.Where(m => m.Owner.Id == user.Id || m.Participants.Any(p => p.Id == user.Id)).ToList();
+        }
+
+        /// <summary>
+        /// Returns all <see cref="Meeting"/>s owned by or attended by this user in a specified timeframe..
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <returns>A List of all <see cref="Meeting"/>s attended by this user in the given timeframe.</returns>
+        public List<Meeting> GetMeetings(User user, DateTime startTime, DateTime endTime)
+        {
+            return GetMeetings(user).Where(m => (m.StartTime >= startTime && m.StartTime <= endTime) || (m.EndTime >= startTime && m.EndTime <= endTime)).ToList();
         }
 
         /// <summary>
@@ -29,24 +44,20 @@ namespace AwesomeSoft.Meet.Services
         }
 
         /// <summary>
-        /// Returns a list of <see cref="Conflict"/> objects representing <see cref="Meeting"/>s of the current user with overlapping time tables.
+        /// Checks a list of <see cref="Meeting"/>s for conflicts, and sets the ConflictingIds property for each <see cref="Meeting"/> that overlas another meetings scheduled times.
         /// </summary>
-        /// <returns>List of <see cref="Conflict"/> objects.</returns>
-        public List<Conflict> GetConflicts(User user)
+        /// <returns>List of <see cref="Meeting"/>s with ConflictingIds set.</returns>
+        public List<Meeting> CheckForConflicts(List<Meeting> meetings)
         {
-            List<Conflict> conflicts = new List<Conflict>();
-            foreach (Meeting meeting in GetMeetings(user))
+            foreach (Meeting meeting in meetings)
             {
-                if (!conflicts.Any(c => c.Meeting.Id == meeting.Id || c.Conflicts.Any(c => c.Id == meeting.Id)))
+                var conflictingMeetings = meetings.Where(m => m.Id != meeting.Id && ((m.StartTime >= meeting.StartTime && m.StartTime <= meeting.EndTime) || (m.EndTime <= meeting.EndTime && m.StartTime >= meeting.StartTime)));
+                if (conflictingMeetings.Any())
                 {
-                    var conflictingMeetings = meetings.Where(m => m.Id != meeting.Id && m.Owner.Id == user.Id && ((m.StartTime >= meeting.StartTime && m.StartTime <= meeting.EndTime) || (m.EndTime <= meeting.EndTime && m.StartTime >= meeting.StartTime)));
-                    if (conflictingMeetings.Any())
-                    {
-                        conflicts.Add(new Models.Conflict(meeting, conflictingMeetings.ToList()));
-                    }
+                    meeting.ConflictingIds = conflictingMeetings.Select(cm => cm.Id);
                 }
             }
-            return conflicts;
+            return meetings;
         }
 
         /// <summary>
