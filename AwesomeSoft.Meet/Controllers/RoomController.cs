@@ -69,7 +69,7 @@ namespace AwesomeSoft.Meet
                 {
                     Name = model.Name
                 });
-                return Created(Url.Action(nameof(Get), new { Id = room.Id }), room);
+                return Created(Url.Action(nameof(Get), new { room.Id }), room);
             }
             return BadRequest();
         }

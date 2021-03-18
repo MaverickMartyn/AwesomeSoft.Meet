@@ -98,7 +98,7 @@ namespace AwesomeSoft.Meet.Controllers
                     Participants = model.ParticipantIds.Select(pid => _userService.GetById(pid)).ToList(),
                     Room = _roomService.GetRoomById(model.RoomId)
                 });
-                return Created(Url.Action(nameof(Get), new { Id = meeting.Id }), meeting);
+                return Created(Url.Action(nameof(Get), new { meeting.Id }), meeting);
             }
             return BadRequest();
         }

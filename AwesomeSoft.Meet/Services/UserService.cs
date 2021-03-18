@@ -28,15 +28,16 @@ namespace AwesomeSoft.Meet.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        // users hardcoded for simplicity, store in a db with hashed passwords in production applications
-        private List<User> _users = DummyData.Instance.Users;
+        // Users hardcoded for simplicity, store in a db with hashed passwords in production applications.
+        // Also readonly, mainly to shut up the compiler as the dummy data never changes.
+        private readonly List<User> _users = DummyData.Instance.Users;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         #region Methods
         /// <summary>
         /// Gets the currently logged in <see cref="User"/>.
         /// </summary>
-        /// <returns>The <see cref="User"/> or <see cref="null"/>.</returns>
+        /// <returns>The <see cref="User"/> or null.</returns>
         public User GetCurrentUser()
         {
             return _httpContextAccessor.HttpContext.Items["User"] as User;
@@ -74,7 +75,7 @@ namespace AwesomeSoft.Meet.Services
         /// Get a <see cref="User"/> by its ID.
         /// </summary>
         /// <param name="id">The ID.</param>
-        /// <returns>A <see cref="User"/> or <see cref="null"/>.</returns>
+        /// <returns>A <see cref="User"/> or null.</returns>
         public User GetById(uint id)
         {
             return _users.FirstOrDefault(x => x.Id == id);
@@ -82,7 +83,7 @@ namespace AwesomeSoft.Meet.Services
         #endregion
 
         #region Helper methods
-        private string GenerateJwtToken(User user)
+        private static string GenerateJwtToken(User user)
         {
             // Generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();

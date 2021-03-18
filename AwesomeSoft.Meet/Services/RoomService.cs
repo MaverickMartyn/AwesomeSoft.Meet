@@ -7,8 +7,8 @@ namespace AwesomeSoft.Meet.Services
 {
     public class RoomService
     {
-        private List<Room> rooms = DummyData.Instance.Rooms;
-        private Random rand = new Random();
+        private readonly List<Room> rooms = DummyData.Instance.Rooms;
+        private readonly Random rand = new Random();
 
         /// <summary>
         /// Returns all rooms.

@@ -10,8 +10,8 @@ namespace AwesomeSoft.Meet.Services
     public class MeetingService
     {
         // Dummy data container
-        private List<Meeting> meetings = DummyData.Instance.Meetings;
-        private Random rand = new Random();
+        private readonly List<Meeting> meetings = DummyData.Instance.Meetings;
+        private readonly Random rand = new Random();
 
         #region Methods
         /// <summary>
@@ -25,9 +25,11 @@ namespace AwesomeSoft.Meet.Services
         }
 
         /// <summary>
-        /// Returns all <see cref="Meeting"/>s owned by or attended by this user in a specified timeframe..
+        /// Returns all <see cref="Meeting"/>s owned by or attended by this user in a specified timeframe.
         /// </summary>
         /// <param name="user">The user.</param>
+        /// <param name="startTime">Start of the time range.</param>
+        /// <param name="endTime">End of the time range.</param>
         /// <returns>A List of all <see cref="Meeting"/>s attended by this user in the given timeframe.</returns>
         public List<Meeting> GetMeetings(User user, DateTime startTime, DateTime endTime)
         {
