@@ -1,7 +1,8 @@
 ﻿import React, { Component } from 'react';
 import moment from 'moment';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Row, Col } from 'reactstrap';
-import DatePicker from 'react-datepicker';
+import { AddEditEventModal } from './AddEditEventModal';
+import { BsFillTrashFill, BsPencilSquare } from "react-icons/bs";
 import './CalendarCommon.css';
 import './WeeklyCalendar.css';
 
@@ -12,21 +13,29 @@ export class WeeklyCalendar extends Component {
         super(props);
         this.state = {
             modal: false,
-            newEvent: {
-                title: "",
-                description: "",
-                startTime: moment().toISOString(),
-                endTime: moment().toISOString(),
-            }
+            eventToEdit: null
         };
 
-        this.toggle = this.toggle.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
+        this.eventModalChangedHandler = this.eventModalChangedHandler.bind(this);
+        this.onClearEventToEditHandler = this.onClearEventToEditHandler.bind(this);
     }
 
-    toggle() {
-        this.setState(prevState => ({
-            modal: !prevState.modal
-        }));
+    toggleModal() {
+        this.setState({ modal: !this.state.modal })
+    }
+
+    editEvent(event) {
+        this.setState({ eventToEdit: event });
+        this.toggleModal();
+    }
+
+    eventModalChangedHandler(event) {
+        this.props.onEventChanged(event)
+    }
+
+    onClearEventToEditHandler() {
+        this.state.eventToEdit = null;
     }
 
     render() {
@@ -64,8 +73,8 @@ export class WeeklyCalendar extends Component {
                 <div key={i}
                     className="event calendar1"
                     style={{ gridColumn: start.isoWeekday() + 2, gridRow: ((start.hour() + 1) + "/span " + timeSpan) }}>
-                    <span className="title">{event.title}</span>
-                    <p>Room: {event.room.name}</p>
+                    <span className="title">{event.title}</span><span className="buttons"><BsPencilSquare onClick={() => this.editEvent(event)} /><BsFillTrashFill onClick={() => this.onEventDeleted(event)} /></span>
+                    <p>Room: {event.room && event.room.name}</p>
                     <p>{event.description}</p>
                 </div>)
         }
@@ -80,7 +89,7 @@ export class WeeklyCalendar extends Component {
         return (
         <div>
             <div className="calendar_container">
-                <div className="title"><div className="side_options"><Button onClick={this.toggle}>New event</Button> {this.props.children}</div> { moment().format("MMMM YYYY [Week] w") }</div>
+                <div className="title"><div className="side_options"><Button onClick={this.toggleModal}>New event</Button> {this.props.children}</div> { moment().format("MMMM YYYY [Week] w") }</div>
                 <div className="days">
                         <div className="filler"></div>
                         <div className="filler"></div>
@@ -99,35 +108,7 @@ export class WeeklyCalendar extends Component {
                     </div>
                 </div>
             </div>
-          <Modal isOpen={this.state.modal} toggle={this.toggle}>
-            <ModalHeader toggle={this.toggle}>Add event</ModalHeader>
-            <ModalBody>
-              <Form>
-                <FormGroup>
-                    <Label for="title">Title</Label>
-                    <Input type="text" name="title" value={this.state.newEvent.title} id="title" />
-                </FormGroup>
-                <FormGroup>
-                    <Label for="description">Description</Label>
-                    <Input type="textarea" name="description" value={this.state.newEvent.description} id="description" />
-                </FormGroup>
-                <FormGroup>
-                    <Label for="start-time">Start time</Label><br />
-                    <DatePicker
-                        name="start-time"
-                        selected={moment(this.state.newEvent.startTime).toDate()}
-                        onChange={date => this.setState({ newEvent: { startTime: date.toISOString() } })}
-                        showTimeSelect
-                        style={{ width: "100%" }}
-                        dateFormat="MMMM d, yyyy h:mm aa" />
-                </FormGroup>
-              </Form>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={this.toggle}>Save</Button>{' '}
-              <Button color="secondary" onClick={this.toggle}>Cancel</Button>
-            </ModalFooter>
-          </Modal>
+            <AddEditEventModal eventToEdit={this.state.eventToEdit} onClearEventToEdit={this.onClearEventToEditHandler} onChange={ this.eventModalChangedHandler } show={this.state.modal} user={this.props.user} onToggleChange={(arg) => this.setState({ modal: arg })} />
         </div>
     );
   }

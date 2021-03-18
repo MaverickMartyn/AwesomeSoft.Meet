@@ -24,14 +24,17 @@ namespace AwesomeSoft.Meet.Controllers
         private readonly ILogger<MeetingsController> _logger;
         private readonly IUserService _userService;
         private readonly MeetingService _meetingService;
+        private readonly RoomService _roomService;
 
         public MeetingsController(ILogger<MeetingsController> logger,
             IUserService userService,
-            MeetingService meetingService)
+            MeetingService meetingService,
+            RoomService roomService)
         {
             _logger = logger;
             _userService = userService;
             _meetingService = meetingService;
+            _roomService = roomService;
         }
 
         #region Actions
@@ -92,7 +95,8 @@ namespace AwesomeSoft.Meet.Controllers
                     StartTime = model.StartTime,
                     EndTime = model.EndTime,
                     Owner = _userService.GetCurrentUser(),
-                    Participants = model.Participants.Select(p => _userService.GetById(p.Id)).ToList()
+                    Participants = model.ParticipantIds.Select(pid => _userService.GetById(pid)).ToList(),
+                    Room = _roomService.GetRoomById(model.RoomId)
                 });
                 return Created(Url.Action(nameof(Get), new { Id = meeting.Id }), meeting);
             }
@@ -131,7 +135,8 @@ namespace AwesomeSoft.Meet.Controllers
                 meeting.Description = model.Description;
                 meeting.StartTime = model.StartTime;
                 meeting.EndTime = model.EndTime;
-                meeting.Participants = model.Participants.Select(p => _userService.GetById(p.Id)).ToList();
+                meeting.Participants = model.ParticipantIds.Select(pid => _userService.GetById(pid)).ToList();
+                meeting.Room = _roomService.GetRoomById(model.RoomId);
                 return Ok(_meetingService.Update(meeting));
             }
             return BadRequest();

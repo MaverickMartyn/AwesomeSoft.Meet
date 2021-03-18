@@ -16,7 +16,8 @@ export class Login extends Component {
         password: ""
     }
 
-    loginHandler() {
+    loginHandler(event) {
+        event.preventDefault();
         axios.post("api/Users/Authenticate", this.state).then((resp) => {
             this.props.onAuthChange(resp.data)
             this.props.history.push("/")
@@ -35,7 +36,7 @@ export class Login extends Component {
         return (
             <Row>
                 <Col md={{ size: '6', offset: 3 }}>
-                    <Form>
+                    <Form onSubmit={this.loginHandler}>
                         <FormGroup>
                             <Label for="username">Email</Label>
                             <Input type="text" name="username" value={this.state.username} onChange={this.handleUsernameChange} id="username" placeholder="Username" />
@@ -44,7 +45,7 @@ export class Login extends Component {
                             <Label for="password">Password</Label>
                             <Input type="password" name="password" value={this.state.password} onChange={this.handlePasswordChange} id="password" placeholder="Password" />
                         </FormGroup>
-                        <Button onClick={this.loginHandler}>
+                        <Button>
                             Login
                         </Button>
                     </Form>

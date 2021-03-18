@@ -54,10 +54,20 @@
     margin-right: 10px;
     font-size: 80%;
     overflow-y: hidden;
+    z-index: 9;
 }
 
 .calendar_container .event .title {
     font-weight: bold;
+}
+
+.event > span.buttons {
+    float: right;
+}
+
+.event > span.buttons > svg {
+    cursor: pointer;
+    margin-left: 0.25rem;
 }
 
 .calendar_container .weekend {

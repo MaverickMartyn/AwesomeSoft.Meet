@@ -27,8 +27,9 @@ namespace AwesomeSoft.Meet.Models.ViewModels
         public DateTime EndTime { get; set; }
 
         [Required]
+        [Range(typeof(uint), "1", "4294967295")] // Not ideal. Try to refactor later.
         public uint RoomId { get; set; }
 
-        public IEnumerable<Participant> Participants { get; set; }
+        public IEnumerable<uint> ParticipantIds { get; set; }
     }
 }
