@@ -1,6 +1,6 @@
 ﻿using AwesomeSoft.Meet.Helpers;
 using AwesomeSoft.Meet.Models;
-using AwesomeSoft.Meet.Models.ViewModels;
+using AwesomeSoft.Meet.Models.DTOs;
 using AwesomeSoft.Meet.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -84,7 +84,7 @@ namespace AwesomeSoft.Meet.Controllers
         [HttpPost("api/[controller]")]
         [ProducesResponseType(typeof(Meeting), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Post(AddMeetingViewModel model)
+        public IActionResult Post(AddMeetingModel model)
         {
             if (ModelState.IsValid)
             {
@@ -123,7 +123,7 @@ namespace AwesomeSoft.Meet.Controllers
         [ProducesResponseType(typeof(Meeting), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Put(uint id, EditMeetingViewModel model)
+        public IActionResult Put(uint id, EditMeetingModel model)
         {
             if (ModelState.IsValid)
             {

@@ -1,5 +1,5 @@
 ﻿using AwesomeSoft.Meet.Models;
-using AwesomeSoft.Meet.Models.ViewModels;
+using AwesomeSoft.Meet.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;

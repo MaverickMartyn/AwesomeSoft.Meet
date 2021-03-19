@@ -1,6 +1,6 @@
 ﻿using AwesomeSoft.Meet.Helpers;
 using AwesomeSoft.Meet.Models;
-using AwesomeSoft.Meet.Models.ViewModels;
+using AwesomeSoft.Meet.Models.DTOs;
 using AwesomeSoft.Meet.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -63,7 +63,7 @@ namespace AwesomeSoft.Meet
         [HttpPost("api/[controller]")]
         [ProducesResponseType(typeof(Room), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Post([FromBody] AddRoomViewModel model)
+        public IActionResult Post([FromBody] AddRoomModel model)
         {
             if (ModelState.IsValid)
             {
@@ -89,7 +89,7 @@ namespace AwesomeSoft.Meet
         [ProducesResponseType(typeof(Room), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Put(uint id, [FromBody] EditRoomViewModel model)
+        public IActionResult Put(uint id, [FromBody] EditRoomModel model)
         {
             if (ModelState.IsValid)
             {

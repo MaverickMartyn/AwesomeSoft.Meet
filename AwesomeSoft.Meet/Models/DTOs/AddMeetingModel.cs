@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace AwesomeSoft.Meet.Models.ViewModels
+namespace AwesomeSoft.Meet.Models.DTOs
 {
     /// <summary>
-    /// Represents a <see cref="Meeting"/> while editing it.
+    /// Represents a <see cref="Meeting"/> while creating it.
     /// </summary>
-    public class EditMeetingViewModel
+    public class AddMeetingModel
     {
-        [Required]
-        public uint Id { get; set; }
-
         [Required]
         [MinLength(3)]
         [MaxLength(25)]
