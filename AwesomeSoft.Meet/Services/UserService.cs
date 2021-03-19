@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -19,29 +17,24 @@ namespace AwesomeSoft.Meet.Services
         IEnumerable<User> GetAll();
         User GetById(uint id);
 
-        User GetCurrentUser();
+        User GetCurrentUser(HttpContext context);
     }
 
     public class UserService : IUserService
     {
-        public UserService(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
 
         // Users hardcoded for simplicity, store in a db with hashed passwords in production applications.
         // Also readonly, mainly to shut up the compiler as the dummy data never changes.
         private readonly List<User> _users = DummyData.Instance.Users;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
         #region Methods
         /// <summary>
         /// Gets the currently logged in <see cref="User"/>.
         /// </summary>
         /// <returns>The <see cref="User"/> or null.</returns>
-        public User GetCurrentUser()
+        public User GetCurrentUser(HttpContext context)
         {
-            return _httpContextAccessor.HttpContext.Items["User"] as User;
+            return context.Items["User"] as User;
         }
 
         /// <summary>

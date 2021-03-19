@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AwesomeSoft.Meet
 {
@@ -33,7 +31,7 @@ namespace AwesomeSoft.Meet
         [ProducesResponseType(typeof(IEnumerable<Room>), StatusCodes.Status200OK)]
         public IActionResult Get(DateTime startTime, DateTime endTime)
         {
-            return Ok(_roomService.GetRooms(_userService.GetCurrentUser(), startTime, endTime));
+            return Ok(_roomService.GetRooms(_userService.GetCurrentUser(HttpContext), startTime, endTime));
         }
 
         /// <summary>

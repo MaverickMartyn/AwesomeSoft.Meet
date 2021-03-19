@@ -2,20 +2,11 @@ using AwesomeSoft.Meet.Helpers;
 using AwesomeSoft.Meet.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.SpaServices;
 using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -36,7 +27,7 @@ namespace AwesomeSoft.Meet
         {
 
             services.AddControllers();
-            // TODO: Remove this?
+            
             services.AddSwaggerGen(c =>
             {
                 // Setting up documentation generation and authorization during API tests.
@@ -45,7 +36,7 @@ namespace AwesomeSoft.Meet
                     new OpenApiSecurityScheme
                     {
                         In = ParameterLocation.Header,
-                        Description = "Please enter into field the word 'Bearer' following by space and JWT",
+                        Description = "Please enter the word 'Bearer' following by space and JWT",
                         Name = "Authorization",
                         Type = SecuritySchemeType.ApiKey
                     });
@@ -57,11 +48,10 @@ namespace AwesomeSoft.Meet
                 c.IncludeXmlComments(xmlPath);
             });
 
-            // Add User service.
+            // Add simplified User service.
             services.AddScoped<IUserService, UserService>();
             services.AddSingleton<MeetingService>(); // Added as singleton to preserve state.
             services.AddSingleton<RoomService>(); // Added as singleton to preserve state.
-            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>(); //Makes HttpContext available as a service.
 
             services.AddRazorPages();
 
@@ -78,7 +68,7 @@ namespace AwesomeSoft.Meet
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                // TODO: Remove this?
+
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("v1/swagger.json", "AwesomeSoft.Meet v1"));
             }
@@ -88,11 +78,6 @@ namespace AwesomeSoft.Meet
             app.UseSpaStaticFiles(); //
 
             app.UseRouting();
-
-            //app.UseSpa((configuration) => configuration.Options.);
-
-            // TODO: Remove this?
-            //app.UseAuthorization();
 
             app.UseMiddleware<JwtMiddleware>();
 

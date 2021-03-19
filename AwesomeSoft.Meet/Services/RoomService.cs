@@ -17,6 +17,7 @@ namespace AwesomeSoft.Meet.Services
             _meetingService = meetingService;
         }
 
+        #region Methods
         /// <summary>
         /// Returns all rooms.
         /// </summary>
@@ -78,5 +79,6 @@ namespace AwesomeSoft.Meet.Services
         {
             rooms.Remove(room);
         }
+        #endregion
     }
 }

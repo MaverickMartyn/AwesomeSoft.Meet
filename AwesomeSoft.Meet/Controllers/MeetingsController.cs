@@ -8,8 +8,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 
 namespace AwesomeSoft.Meet.Controllers
 {
@@ -48,7 +46,7 @@ namespace AwesomeSoft.Meet.Controllers
         [ProducesResponseType(typeof(IEnumerable<Meeting>), StatusCodes.Status200OK)]
         public IActionResult Get(DateTime startTime, DateTime endTime)
         {
-            return Ok(_meetingService.CheckForConflicts(_meetingService.GetMeetings(_userService.GetCurrentUser(), startTime, endTime)));
+            return Ok(_meetingService.CheckForConflicts(_meetingService.GetMeetings(_userService.GetCurrentUser(HttpContext), startTime, endTime)));
         }
 
         /// <summary>
@@ -60,7 +58,7 @@ namespace AwesomeSoft.Meet.Controllers
         public IActionResult Get(uint id)
         {
             Meeting meeting = _meetingService.GetMeetingById(id);
-            User user = _userService.GetCurrentUser();
+            User user = _userService.GetCurrentUser(HttpContext);
             if (meeting is null)
             {
                 return NotFound();
@@ -88,7 +86,7 @@ namespace AwesomeSoft.Meet.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (!_roomService.GetRooms(_userService.GetCurrentUser(), model.StartTime, model.EndTime).Any(r => r.Id == model.RoomId))
+                if (!_roomService.GetRooms(_userService.GetCurrentUser(HttpContext), model.StartTime, model.EndTime).Any(r => r.Id == model.RoomId))
                 {
                     return BadRequest("Room unavailable.");
                 }
@@ -99,7 +97,7 @@ namespace AwesomeSoft.Meet.Controllers
                     Description = model.Description,
                     StartTime = model.StartTime,
                     EndTime = model.EndTime,
-                    Owner = _userService.GetCurrentUser(),
+                    Owner = _userService.GetCurrentUser(HttpContext),
                     Participants = model.ParticipantIds.Select(pid => _userService.GetById(pid)).ToList(),
                     Room = _roomService.GetRoomById(model.RoomId)
                 });
@@ -127,9 +125,9 @@ namespace AwesomeSoft.Meet.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (!_roomService.GetRooms(_userService.GetCurrentUser(), model.StartTime, model.EndTime).Any(r => r.Id == model.RoomId))
+                if (!_roomService.GetRooms(_userService.GetCurrentUser(HttpContext), model.StartTime, model.EndTime).Any(r => r.Id == model.RoomId))
                 {
-                    return BadRequest("Room unavailable.");
+                    return BadRequest(new { message = "Room unavailable." });
                 }
 
                 var meeting = _meetingService.GetMeetingById(id);
@@ -137,7 +135,7 @@ namespace AwesomeSoft.Meet.Controllers
                 {
                     return NotFound();
                 }
-                if (meeting.Owner != _userService.GetCurrentUser())
+                if (meeting.Owner != _userService.GetCurrentUser(HttpContext))
                 {
                     return Unauthorized();
                 }
@@ -172,7 +170,7 @@ namespace AwesomeSoft.Meet.Controllers
                 return NotFound();
             }
 
-            if (meeting.Owner != _userService.GetCurrentUser())
+            if (meeting.Owner != _userService.GetCurrentUser(HttpContext))
             {
                 return Unauthorized();
             }
