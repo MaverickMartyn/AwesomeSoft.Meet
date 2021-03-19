@@ -29,7 +29,7 @@ namespace AwesomeSoft.Meet.Helpers
             await _next(context);
         }
 
-        private void AttachUserToContext(HttpContext context, IUserService userService, string token)
+        private static void AttachUserToContext(HttpContext context, IUserService userService, string token)
         {
             try
             {

@@ -1,4 +1,6 @@
-﻿namespace AwesomeSoft.Meet.Models.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AwesomeSoft.Meet.Models.DTOs
 {
     public class AddRoomModel
     {
