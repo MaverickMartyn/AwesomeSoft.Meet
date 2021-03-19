@@ -106,7 +106,7 @@ export class AddEditEventModal extends Component {
     }
 
     getRooms() {
-        axios.get("/api/Room",
+        axios.get("/api/Room/" + moment(this.state.startTime).toISOString() + "/" + moment(this.state.endTime).toISOString(),
             { headers: { 'Authorization': 'Bearer ' + this.props.user.token } })
             .then((resp) => {
                 this.setState({ availableRooms: resp.data });
@@ -117,6 +117,7 @@ export class AddEditEventModal extends Component {
         let event = this.state;
         event[dateProp] = date.toISOString();
         this.setState(event)
+        this.getRooms();
     }
 
     updateField(event) {

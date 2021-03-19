@@ -9,6 +9,12 @@ namespace AwesomeSoft.Meet.Services
     {
         private readonly List<Room> rooms = DummyData.Instance.Rooms;
         private readonly Random rand = new Random();
+        private readonly MeetingService _meetingService;
+
+        public RoomService(MeetingService meetingService)
+        {
+            _meetingService = meetingService;
+        }
 
         /// <summary>
         /// Returns all rooms.
@@ -17,6 +23,19 @@ namespace AwesomeSoft.Meet.Services
         public List<Room> GetRooms()
         {
             return rooms;
+        }
+
+        /// <summary>
+        /// Returns all rooms.
+        /// </summary>
+        /// <param name="user">The <see cref="User"/>.</param>
+        /// <param name="startTime">The start (inclusive) of the date range.</param>
+        /// <param name="endTime">The end (inclusive) of the date range.</param>
+        /// <returns>A generic list of <see cref="Room"/>s.</returns>
+        public List<Room> GetRooms(User user, DateTime startTime, DateTime endTime)
+        {
+            var meetings = _meetingService.GetMeetings(user, startTime, endTime);
+            return rooms.Where(r => !meetings.Any(m => m.Room.Id == r.Id)).ToList();
         }
 
         /// <summary>

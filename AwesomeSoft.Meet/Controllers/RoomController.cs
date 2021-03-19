@@ -16,10 +16,12 @@ namespace AwesomeSoft.Meet
     public class RoomController : ControllerBase
     {
         private readonly RoomService _roomService;
+        private readonly IUserService _userService;
 
-        public RoomController(RoomService roomService)
+        public RoomController(RoomService roomService, IUserService userService)
         {
             _roomService = roomService;
+            _userService = userService;
         }
 
         #region Actions
@@ -27,11 +29,11 @@ namespace AwesomeSoft.Meet
         /// Gets all the possible <see cref="Room"/>s.
         /// </summary>
         /// <returns>A collection of <see cref="Room"/>s.</returns>
-        [HttpGet("api/[controller]")]
+        [HttpGet("api/[controller]/{startTime}/{endTime}")]
         [ProducesResponseType(typeof(IEnumerable<Room>), StatusCodes.Status200OK)]
-        public IActionResult Get()
+        public IActionResult Get(DateTime startTime, DateTime endTime)
         {
-            return Ok(_roomService.GetRooms());
+            return Ok(_roomService.GetRooms(_userService.GetCurrentUser(), startTime, endTime));
         }
 
         /// <summary>

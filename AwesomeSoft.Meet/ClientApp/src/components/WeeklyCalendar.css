@@ -54,7 +54,7 @@
     margin-right: 10px;
     font-size: 80%;
     overflow-y: hidden;
-    z-index: 9;
+    z-index: 8;
     border: 1px solid;
 }
 
@@ -104,4 +104,5 @@
 
 .calendar_container .current {
     font-weight: bold;
+    z-index: 9;
 }

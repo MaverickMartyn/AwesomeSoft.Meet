@@ -88,6 +88,11 @@ namespace AwesomeSoft.Meet.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (!_roomService.GetRooms(_userService.GetCurrentUser(), model.StartTime, model.EndTime).Any(r => r.Id == model.RoomId))
+                {
+                    return BadRequest("Room unavailable.");
+                }
+
                 var meeting = _meetingService.Add(new Meeting()
                 {
                     Title = model.Title,
@@ -98,6 +103,7 @@ namespace AwesomeSoft.Meet.Controllers
                     Participants = model.ParticipantIds.Select(pid => _userService.GetById(pid)).ToList(),
                     Room = _roomService.GetRoomById(model.RoomId)
                 });
+
                 return Created(Url.Action(nameof(Get), new { meeting.Id }), meeting);
             }
             return BadRequest();
@@ -121,6 +127,11 @@ namespace AwesomeSoft.Meet.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (!_roomService.GetRooms(_userService.GetCurrentUser(), model.StartTime, model.EndTime).Any(r => r.Id == model.RoomId))
+                {
+                    return BadRequest("Room unavailable.");
+                }
+
                 var meeting = _meetingService.GetMeetingById(id);
                 if (meeting is null)
                 {
