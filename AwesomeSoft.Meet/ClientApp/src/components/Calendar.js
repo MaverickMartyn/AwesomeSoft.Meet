@@ -6,10 +6,10 @@ import axios from 'axios';
 import moment from 'moment';
 
 export class Calendar extends Component {
-  static displayName = Calendar.name;
+    static displayName = Calendar.name;
 
     constructor(props) {
-      super(props);
+        super(props);
 
         this.change = this.change.bind(this);
         this.onEventChangedHandler = this.onEventChangedHandler.bind(this);
@@ -33,7 +33,7 @@ export class Calendar extends Component {
     }
 
     change(event) {
-        this.setState({displayMonthly: event.target.value});
+        this.setState({ displayMonthly: event.target.value });
     }
 
     onEventChangedHandler(event) {
@@ -62,22 +62,22 @@ export class Calendar extends Component {
         }
     }
 
-  render() {
-    if (this.props.user === null || this.props.user === undefined) {
-      return <Redirect to={"/login"} />
-      }
-    var viewSelect =
-          <select onChange={this.change} value={this.state.displayMonthly}>
-              <option value="weekly">Weekly</option>
-              <option value="monthly">Monthly</option>
-          </select>
+    render() {
+        if (this.props.user === null || this.props.user === undefined) {
+            return <Redirect to={"/login"} />
+        }
+        var viewSelect =
+            <select onChange={this.change} value={this.state.displayMonthly}>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+            </select>
 
-    return (
-        <div>
-            {this.state.displayMonthly === "monthly"
-              ? <MonthlyCalendar user={this.props.user} value={this.state.meetings}>{viewSelect}</MonthlyCalendar>
-              : <WeeklyCalendar user={this.props.user} onEventChanged={this.onEventChangedHandler} onEventDeleted={this.onEventDeletedHandler} value={this.state.meetings}>{viewSelect}</WeeklyCalendar>}
-      </div>
-    );
-  }
+        return (
+            <div>
+                {this.state.displayMonthly === "monthly"
+                    ? <MonthlyCalendar user={this.props.user} value={this.state.meetings}>{viewSelect}</MonthlyCalendar>
+                    : <WeeklyCalendar user={this.props.user} onEventChanged={this.onEventChangedHandler} onEventDeleted={this.onEventDeletedHandler} value={this.state.meetings}>{viewSelect}</WeeklyCalendar>}
+            </div>
+        );
+    }
 }

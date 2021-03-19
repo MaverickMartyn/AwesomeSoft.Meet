@@ -10,10 +10,6 @@ import {
     FormGroup,
     Label,
     Input,
-    Dropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem
 } from 'reactstrap';
 import DatePicker from 'react-datepicker';
 import axios from 'axios';
@@ -82,7 +78,7 @@ export class AddEditEventModal extends Component {
                 endTime: this.state.endTime,
                 roomId: this.state.roomId,
                 participantIds: this.state.participantIds,
-            }, 
+            },
                 { headers: { 'Authorization': 'Bearer ' + this.props.user.token } })
                 .then((resp) => {
                     this.setState(this.emptyEvent);
@@ -147,64 +143,64 @@ export class AddEditEventModal extends Component {
         var participantOptions = this.state.availableParticipants && this.state.availableParticipants.map((r) => (<div key={r.id}><input onChange={this.updateParticipantIdsField} type="checkbox" defaultChecked={this.state.participantIds.indexOf(r.id.toString()) > -1} value={r.id} /> {r.name}</div>));
 
         return (
-        <Modal isOpen={this.props.show} toggle={this.toggle}>
-            <ModalHeader toggle={this.toggle}>{this.state.id > 0 ? "Edit" : "Add"} event</ModalHeader>
-            <ModalBody>
-                <Form>
-                    <FormGroup>
-                        <Label for="title">Title</Label>
-                        <Input type="text" name="title" value={this.state.title} onChange={this.updateField} id="title" />
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="description">Description</Label>
-                        <Input type="textarea" name="description" value={this.state.description} onChange={this.updateField} id="description" />
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="start-time">Start time</Label><br />
-                        <DatePicker
-                            name="start-time"
-                            selected={moment(this.state.startTime).toDate()}
-                            onChange={date => this.updateDate(date, "startTime")}
-                            selectsStart
-                            startDate={moment(this.state.startTime).toDate()}
-                            endDate={moment(this.state.endTime).toDate()}
-                            showTimeSelect
-                            dateFormat="MMMM d, yyyy h:mm aa"
-                        />
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="end-time">End time</Label><br />
-                        <DatePicker
-                            name="end-time"
-                            selected={(this.state.endTime === this.state.startTime) ? moment(this.state.endTime).add(1, 'h').toDate() : moment(this.state.endTime).toDate()}
-                            onChange={date => this.updateDate(date, "endTime")}
-                            selectsEnd
-                            startDate={moment(this.state.startTime).toDate()}
-                            endDate={moment(this.state.endTime).toDate()}
-                            minDate={moment(this.state.startTime).add(1, 'h').toDate()}
-                            showTimeSelect
-                            dateFormat="MMMM d, yyyy h:mm aa"
-                        />
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="roomId">Room</Label><br />
-                        <select name="roomId" value={this.state.roomId} onChange={ this.updateField }>
-                            <option value="0">Select a room</option>
-                            { roomOptions }
-                        </select>
-                    </FormGroup>
-                    <FormGroup>
-                        <div className="participants-scroller">
-                            <Label for="participants">Participants</Label><br />
-                            { participantOptions }
-                        </div>
-                    </FormGroup>
-                </Form>
-            </ModalBody>
-            <ModalFooter>
-                <Button color="primary" onClick={this.saveEvent}>Save</Button>{' '}
-                <Button color="secondary" onClick={() => {this.toggle(); this.setState(this.emptyEvent)}}>Cancel</Button>
-            </ModalFooter>
-        </Modal>)
+            <Modal isOpen={this.props.show} toggle={this.toggle}>
+                <ModalHeader toggle={this.toggle}>{this.state.id > 0 ? "Edit" : "Add"} event</ModalHeader>
+                <ModalBody>
+                    <Form>
+                        <FormGroup>
+                            <Label for="title">Title</Label>
+                            <Input type="text" name="title" value={this.state.title} onChange={this.updateField} id="title" />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="description">Description</Label>
+                            <Input type="textarea" name="description" value={this.state.description} onChange={this.updateField} id="description" />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="start-time">Start time</Label><br />
+                            <DatePicker
+                                name="start-time"
+                                selected={moment(this.state.startTime).toDate()}
+                                onChange={date => this.updateDate(date, "startTime")}
+                                selectsStart
+                                startDate={moment(this.state.startTime).toDate()}
+                                endDate={moment(this.state.endTime).toDate()}
+                                showTimeSelect
+                                dateFormat="MMMM d, yyyy h:mm aa"
+                            />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="end-time">End time</Label><br />
+                            <DatePicker
+                                name="end-time"
+                                selected={(this.state.endTime === this.state.startTime) ? moment(this.state.endTime).add(1, 'h').toDate() : moment(this.state.endTime).toDate()}
+                                onChange={date => this.updateDate(date, "endTime")}
+                                selectsEnd
+                                startDate={moment(this.state.startTime).toDate()}
+                                endDate={moment(this.state.endTime).toDate()}
+                                minDate={moment(this.state.startTime).add(1, 'h').toDate()}
+                                showTimeSelect
+                                dateFormat="MMMM d, yyyy h:mm aa"
+                            />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="roomId">Room</Label><br />
+                            <select name="roomId" value={this.state.roomId} onChange={this.updateField}>
+                                <option value="0">Select a room</option>
+                                {roomOptions}
+                            </select>
+                        </FormGroup>
+                        <FormGroup>
+                            <div className="participants-scroller">
+                                <Label for="participants">Participants</Label><br />
+                                {participantOptions}
+                            </div>
+                        </FormGroup>
+                    </Form>
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onClick={this.saveEvent}>Save</Button>{' '}
+                    <Button color="secondary" onClick={() => { this.toggle(); this.setState(this.emptyEvent) }}>Cancel</Button>
+                </ModalFooter>
+            </Modal>)
     }
 }

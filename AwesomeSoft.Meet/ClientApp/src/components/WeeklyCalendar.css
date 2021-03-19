@@ -58,18 +58,18 @@
     border: 1px solid;
 }
 
-.calendar_container .event .title {
-    font-weight: bold;
-}
+    .calendar_container .event .title {
+        font-weight: bold;
+    }
 
 .event > span.buttons {
     float: right;
 }
 
-.event > span.buttons > svg {
-    cursor: pointer;
-    margin-left: 0.25rem;
-}
+    .event > span.buttons > svg {
+        cursor: pointer;
+        margin-left: 0.25rem;
+    }
 
 .calendar_container .weekend {
     background-color: #f1f3f4;

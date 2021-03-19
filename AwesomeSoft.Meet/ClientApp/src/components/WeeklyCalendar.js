@@ -1,13 +1,13 @@
 ﻿import React, { Component } from 'react';
 import moment from 'moment';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Row, Col } from 'reactstrap';
+import { Button } from 'reactstrap';
 import { AddEditEventModal } from './AddEditEventModal';
 import { BsFillTrashFill, BsPencilSquare } from "react-icons/bs";
 import './CalendarCommon.css';
 import './WeeklyCalendar.css';
 
 export class WeeklyCalendar extends Component {
-  static displayName = WeeklyCalendar.name;
+    static displayName = WeeklyCalendar.name;
 
     constructor(props) {
         super(props);
@@ -71,7 +71,7 @@ export class WeeklyCalendar extends Component {
             let timeSpan = (end.hour() - start.hour());
             events.push(
                 <div key={i}
-                    className={'event calendar' + ((event.conflictingIds && event.conflictingIds.length > 0) ? ' conflict' : '') }
+                    className={'event calendar' + ((event.conflictingIds && event.conflictingIds.length > 0) ? ' conflict' : '')}
                     style={{
                         gridColumn: start.isoWeekday() + 2,
                         gridRow: ((start.hour() + 1) + "/span " + timeSpan),
@@ -91,29 +91,29 @@ export class WeeklyCalendar extends Component {
         //];
 
         return (
-        <div>
-            <div className="calendar_container">
-                <div className="title"><div className="side_options"><Button onClick={this.toggleModal}>New event</Button> {this.props.children}</div> { moment().format("MMMM YYYY [Week] w") }</div>
-                <div className="days">
+            <div>
+                <div className="calendar_container">
+                    <div className="title"><div className="side_options"><Button onClick={this.toggleModal}>New event</Button> {this.props.children}</div> {moment().format("MMMM YYYY [Week] w")}</div>
+                    <div className="days">
                         <div className="filler"></div>
                         <div className="filler"></div>
                         {days}
-                </div>
+                    </div>
 
-                <div className="content">
-                    {hours}
-                    <div className="filler-col"></div>
-                    {cols}
-                    {rows}
-                    {/*dummyEvents*/}
-                    {events}
-                    <div className="current-time" style={{ gridColumn: moment().isoWeekday()+2, gridRow: moment().hour()+1 }}>
-                        <div className="circle"></div>
+                    <div className="content">
+                        {hours}
+                        <div className="filler-col"></div>
+                        {cols}
+                        {rows}
+                        {/*dummyEvents*/}
+                        {events}
+                        <div className="current-time" style={{ gridColumn: moment().isoWeekday() + 2, gridRow: moment().hour() + 1 }}>
+                            <div className="circle"></div>
+                        </div>
                     </div>
                 </div>
+                <AddEditEventModal eventToEdit={this.state.eventToEdit} onClearEventToEdit={this.onClearEventToEditHandler} onChange={this.eventModalChangedHandler} show={this.state.modal} user={this.props.user} onToggleChange={(arg) => this.setState({ modal: arg })} />
             </div>
-            <AddEditEventModal eventToEdit={this.state.eventToEdit} onClearEventToEdit={this.onClearEventToEditHandler} onChange={ this.eventModalChangedHandler } show={this.state.modal} user={this.props.user} onToggleChange={(arg) => this.setState({ modal: arg })} />
-        </div>
-    );
-  }
+        );
+    }
 }

@@ -4,7 +4,7 @@ import { NavMenu } from './NavMenu';
 import { withRouter } from 'react-router'
 
 class Layout extends Component {
-  static displayName = Layout.name;
+    static displayName = Layout.name;
 
     constructor(props) {
         super(props);
@@ -19,22 +19,22 @@ class Layout extends Component {
         useFluidContainer: this.props.history.location.pathname === "/"
     }
 
-  render () {
-    var containerType = 
-    <Container>
-      {this.props.children}
-    </Container>
-      if (this.state.useFluidContainer) {
-      containerType = <Container fluid>
-        {this.props.children}
-      </Container>
+    render() {
+        var containerType =
+            <Container>
+                {this.props.children}
+            </Container>
+        if (this.state.useFluidContainer) {
+            containerType = <Container fluid>
+                {this.props.children}
+            </Container>
+        }
+        return (
+            <div>
+                <NavMenu onLogout={this.props.onNavLogout} user={this.props.user} />
+                {containerType}
+            </div>
+        );
     }
-    return (
-      <div>
-        <NavMenu onLogout={this.props.onNavLogout} user={this.props.user} />
-        {containerType}
-      </div>
-    );
-  }
 }
 export default withRouter(Layout)

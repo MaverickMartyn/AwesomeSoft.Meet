@@ -17,6 +17,7 @@
         top: 0;
         z-index: 10;
     }
+
         .calendar_container > .title .side_options {
             position: absolute;
             top: 50%;
@@ -27,6 +28,6 @@
     .calendar_container .row {
         display: unset;
         flex-wrap: unset;
-        margin-right: unset; 
+        margin-right: unset;
         margin-left: unset;
     }
