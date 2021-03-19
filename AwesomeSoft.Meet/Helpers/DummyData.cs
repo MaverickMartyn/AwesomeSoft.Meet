@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AwesomeSoft.Meet.Models;
 
-namespace AwesomeSoft.Meet
+namespace AwesomeSoft.Meet.Helpers
 {
     /// <summary>
     /// A singleton class to store dummy data, instead of using a live database.

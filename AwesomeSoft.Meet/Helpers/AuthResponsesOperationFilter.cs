@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AwesomeSoft.Meet
+namespace AwesomeSoft.Meet.Helpers
 {
     /// <summary>
     /// Used to filter which actions require authentication, when generating Swagger documentation.
