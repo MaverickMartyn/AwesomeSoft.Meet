@@ -71,7 +71,7 @@ namespace AwesomeSoft.Meet.Controllers
                 return Unauthorized();
             }
 
-            return Ok(meeting);
+            return Ok(_meetingService.CheckForConflicts(meeting));
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace AwesomeSoft.Meet.Controllers
                     Room = _roomService.GetRoomById(model.RoomId)
                 });
 
-                return Created(Url.Action(nameof(Get), new { meeting.Id }), meeting);
+                return Created(Url.Action(nameof(Get), new { meeting.Id }), _meetingService.CheckForConflicts(meeting));
             }
             return BadRequest();
         }
@@ -148,7 +148,7 @@ namespace AwesomeSoft.Meet.Controllers
                 meeting.EndTime = model.EndTime;
                 meeting.Participants = model.ParticipantIds.Select(pid => _userService.GetById(pid)).ToList();
                 meeting.Room = _roomService.GetRoomById(model.RoomId);
-                return Ok(_meetingService.Update(meeting));
+                return Ok(_meetingService.CheckForConflicts(_meetingService.Update(meeting)));
             }
             return BadRequest();
         }

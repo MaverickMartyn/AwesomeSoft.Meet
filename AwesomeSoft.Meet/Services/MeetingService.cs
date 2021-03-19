@@ -63,6 +63,15 @@ namespace AwesomeSoft.Meet.Services
         }
 
         /// <summary>
+        /// Checks single <see cref="Meeting"/> for conflicts, and sets the ConflictingIds property if it overlaps another meetings scheduled times.
+        /// </summary>
+        /// <returns>List of <see cref="Meeting"/>s with ConflictingIds set.</returns>
+        public Meeting CheckForConflicts(Meeting meeting)
+        {
+            return CheckForConflicts(GetMeetings(meeting.Owner, meeting.StartTime, meeting.EndTime)).FirstOrDefault(m => m.Id == meeting.Id);
+        }
+
+        /// <summary>
         /// Adds a meeting to the store.
         /// </summary>
         /// <param name="meeting">The finished <see cref="Meeting"/> object.</param>
