@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { BiLinkExternal } from "react-icons/bi";
 //import { LoginMenu } from './api-authorization/LoginMenu';
 import './NavMenu.css';
 
@@ -36,7 +37,10 @@ export class NavMenu extends Component {
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
               <ul className="navbar-nav flex-grow">
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/">Calendar</NavLink>
+                  <NavLink tag={Link} className="text-dark" to="/">Welcome, {this.props.user.username}</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink tag={Link} className="text-dark" to="/swagger" target="_blank">Swagger Docs <BiLinkExternal /></NavLink>
                 </NavItem>
                 {!!this.props.user ? logoutLink : ""}
               </ul>
