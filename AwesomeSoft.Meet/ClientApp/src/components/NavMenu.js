@@ -23,6 +23,10 @@ export class NavMenu extends Component {
     }
 
     render() {
+        const homeLink =
+            <NavItem>
+                <NavLink tag={Link} className="text-dark" to="/">Welcome, {this.props.user && this.props.user.username}</NavLink>
+            </NavItem>
         const logoutLink =
             <NavItem>
                 <NavLink className="text-dark" onClick={this.props.onLogout}>Logout</NavLink>
@@ -35,9 +39,7 @@ export class NavMenu extends Component {
                         <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
                         <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
                             <ul className="navbar-nav flex-grow">
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/">Welcome, {this.props.user.username}</NavLink>
-                                </NavItem>
+                                {!!this.props.user ? homeLink : ""}
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/swagger" target="_blank">Swagger Docs <BiLinkExternal /></NavLink>
                                 </NavItem>

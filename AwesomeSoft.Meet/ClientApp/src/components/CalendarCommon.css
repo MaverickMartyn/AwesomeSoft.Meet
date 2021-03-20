@@ -18,11 +18,15 @@
         z-index: 10;
     }
 
-        .calendar_container > .title .side_options {
+        .calendar_container > .title > .side_options {
             position: absolute;
             top: 50%;
             left: 0.5rem;
             transform: translateY(-50%);
+        }
+
+        .calendar_container > .title > .side_options > button {
+            white-space: nowrap;
         }
 
     .calendar_container .row {
