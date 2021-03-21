@@ -62,8 +62,9 @@ export class Calendar extends Component {
         else {
             startMoment[action](1, 'M');
         }
-        this.setState(this.getDates(startMoment));
-        this.populateCalendar();
+        this.setState(this.getDates(startMoment), () => {
+            this.populateCalendar();
+        });
     }
 
     state = {

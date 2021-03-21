@@ -70,9 +70,10 @@ export class AddEditEventModal extends Component {
             },
                 { headers: { 'Authorization': 'Bearer ' + this.props.user.token } })
                 .then((resp) => {
-                    this.setState(this.emptyEvent);
-                    this.props.onChange(resp.data);
-                    this.toggle();
+                    this.setState(this.emptyEvent, () => {
+                        this.props.onChange(resp.data);
+                        this.toggle();
+                    });
                 });
         }
         else {
@@ -86,9 +87,10 @@ export class AddEditEventModal extends Component {
             },
                 { headers: { 'Authorization': 'Bearer ' + this.props.user.token } })
                 .then((resp) => {
-                    this.setState(this.emptyEvent);
-                    this.props.onChange(resp.data);
-                    this.toggle();
+                    this.setState(this.emptyEvent, () => {
+                        this.props.onChange(resp.data);
+                        this.toggle();
+                    });
                 });
         }
     }
@@ -119,8 +121,9 @@ export class AddEditEventModal extends Component {
     updateDate(date, dateProp) {
         let event = this.state;
         event[dateProp] = date.toISOString();
-        this.setState(event)
-        this.getRooms();
+        this.setState(event, () => {
+            this.getRooms();
+        })
     }
 
     updateField(event) {

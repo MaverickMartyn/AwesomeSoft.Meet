@@ -29,8 +29,9 @@ export class WeeklyCalendar extends Component {
     }
 
     editEvent(event) {
-        this.setState({ eventToEdit: event });
-        this.toggleModal();
+        this.setState({ eventToEdit: event }, () => {
+            this.toggleModal();
+        });
     }
 
     eventModalChangedHandler(event) {
