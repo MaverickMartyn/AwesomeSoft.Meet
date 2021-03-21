@@ -1,92 +1,78 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using AwesomeSoft.Meet.Models;
+using System.Threading.Tasks;
 
-namespace AwesomeSoft.Meet.Helpers
+namespace AwesomeSoft.Meet.Models
 {
     /// <summary>
-    /// A singleton class to store dummy data, instead of using a live database.
+    /// Database seeding method.
     /// </summary>
-    public class DummyData
+    public static class DbSeeder
     {
-        private static DummyData _instance;
-
-        public List<Meeting> Meetings { get; set; }
-
-        public List<User> Users { get; set; }
-
-        public List<Room> Rooms { get; set; }
-
-        public static DummyData Instance {
-            get
-            {
-                if (_instance is null)
-                {
-                    _instance = new DummyData();
-                }
-                return _instance;
-            }
-        }
-
-        private DummyData()
+        public static async Task AddTestDataAsync(ApplicationDbContext context)
         {
-            Users = new List<User>()
+            var users = new List<User>()
             {
                 new User()
                 {
-                    Id = 1,
                     Name = "User1"
                 },
                 new User()
                 {
-                    Id = 2,
                     Name = "User2"
                 }
             };
-            Rooms = new List<Room>()
+            context.Users.AddRange(users);
+            context.SaveChanges();
+
+            var rooms = new List<Room>()
             {
                 new Room()
                 {
-                    Id = 1,
                     Name = "Meeting Room 1"
                 },
                 new Room()
                 {
-                    Id = 2,
                     Name = "Meeting Room 2"
                 },
                 new Room()
                 {
-                    Id = 3,
                     Name = "Large Meeting Room 1"
                 },
                 new Room()
                 {
-                    Id = 4,
                     Name = "Office 1"
                 }
             };
-            Meetings = new List<Meeting>()
+            context.Rooms.AddRange(rooms);
+            context.SaveChanges();
+
+            var meetings = new List<Meeting>()
             {
                 new Meeting() {
                     Id = 1,
                     Title = "Test meeting 1",
                     Description = "This is just a test meeting.\nNothing to see here.",
-                    Owner = Users.First(),
-                    Room = Rooms.First()
+                    // Explicit OrderBy Id at all FirstOrDefault calls since SQLite requires it.
+                    Owner = await context.Users.OrderBy(u => u.Id).FirstOrDefaultAsync(),
+                    Room = await context.Rooms.OrderBy(r => r.Id).FirstOrDefaultAsync()
                 },
                 new Meeting() {
                     Id = 2,
                     Title = "Test meeting 2",
                     Description = "This is just a another test meeting.\nNothing to see here.",
-                    Owner = Users.Last(),
+                    Owner = await context.Users.OrderBy(u => u.Id).LastOrDefaultAsync(),
                     Participants = new List<User>()
                     {
-                        Users.First()
+                        await context.Users.OrderBy(u => u.Id).FirstOrDefaultAsync(),
                     },
-                    Room = Rooms.Last()
+                    Room = await context.Rooms.OrderBy(r => r.Id).FirstOrDefaultAsync()
                 }
             };
+            context.Meetings.AddRange(meetings);
+            context.SaveChanges();
         }
     }
 }

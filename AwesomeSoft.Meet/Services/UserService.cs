@@ -22,10 +22,12 @@ namespace AwesomeSoft.Meet.Services
 
     public class UserService : IUserService
     {
+        private readonly ApplicationDbContext _context;
 
-        // Users hardcoded for simplicity, store in a db with hashed passwords in production applications.
-        // Also readonly, mainly to shut up the compiler as the dummy data never changes.
-        private readonly List<User> _users = DummyData.Instance.Users;
+        public UserService(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
         #region Methods
         /// <summary>
@@ -44,13 +46,12 @@ namespace AwesomeSoft.Meet.Services
         /// <returns>A <see cref="AuthenticateResponse"/> containing <see cref="User"/> details and JWT.</returns>
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
         {
-            var user = _users.SingleOrDefault(x => x.Name == model.Username);
-            //var user = _users.SingleOrDefault(x => x.Name == model.Username && x.Password == model.Password);
+            var user = _context.Users.SingleOrDefault(x => x.Name == model.Username); // TODO: Add password check in production.
 
             // return null if user not found
             if (user == null) return null;
 
-            // authentication successful so generate jwt token
+            // Authentication successful so generate JWT token
             var token = GenerateJwtToken(user);
 
             return new AuthenticateResponse(user, token);
@@ -62,7 +63,7 @@ namespace AwesomeSoft.Meet.Services
         /// <returns>An IEnumerable og <see cref="User"/>s</returns>
         public IEnumerable<User> GetAll()
         {
-            return _users;
+            return _context.Users;
         }
 
         /// <summary>
@@ -72,7 +73,7 @@ namespace AwesomeSoft.Meet.Services
         /// <returns>A <see cref="User"/> or null.</returns>
         public User GetById(uint id)
         {
-            return _users.FirstOrDefault(x => x.Id == id);
+            return _context.Users.FirstOrDefault(x => x.Id == id);
         }
         #endregion
 

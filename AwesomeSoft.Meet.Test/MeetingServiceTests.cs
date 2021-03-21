@@ -1,5 +1,8 @@
 using AwesomeSoft.Meet.Models;
 using AwesomeSoft.Meet.Services;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using Xunit;
@@ -20,7 +23,17 @@ namespace AwesomeSoft.Meet.Test
         /// </summary>
         private void Setup()
         {
-            _meetingService = new MeetingService();
+            IServiceCollection services = new ServiceCollection();
+
+            var keepAliveConnection = new SqliteConnection("DataSource=:memory:");
+            keepAliveConnection.Open();
+
+            services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlite(keepAliveConnection));
+            ServiceProvider serviceProvider = services.BuildServiceProvider();
+            ApplicationDbContext context = serviceProvider.GetService<ApplicationDbContext>();
+            context.Database.EnsureCreated();
+
+            _meetingService = new MeetingService(context);
         }
 
         /// <summary>
@@ -31,7 +44,8 @@ namespace AwesomeSoft.Meet.Test
         {
             Setup();
 
-            Meeting meeting1 = _meetingService.Add(new Meeting() {
+            Meeting meeting1 = _meetingService.Add(new Meeting()
+            {
                 Title = "Meeting 1",
                 Description = "This is a meeting.",
                 StartTime = new DateTime(2021, 4, 1, 13, 30, 0),

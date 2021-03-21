@@ -8,13 +8,14 @@ namespace AwesomeSoft.Meet.Services
 {
     public class RoomService
     {
-        private readonly List<Room> rooms = DummyData.Instance.Rooms;
-        private readonly Random rand = new Random();
         private readonly MeetingService _meetingService;
+        private readonly ApplicationDbContext _context;
 
-        public RoomService(MeetingService meetingService)
+        public RoomService(MeetingService meetingService,
+            ApplicationDbContext context)
         {
             _meetingService = meetingService;
+            _context = context;
         }
 
         #region Methods
@@ -24,7 +25,7 @@ namespace AwesomeSoft.Meet.Services
         /// <returns>A generic list of <see cref="Room"/>s.</returns>
         public List<Room> GetRooms()
         {
-            return rooms;
+            return _context.Rooms.ToList();
         }
 
         /// <summary>
@@ -36,8 +37,8 @@ namespace AwesomeSoft.Meet.Services
         /// <returns>A generic list of <see cref="Room"/>s.</returns>
         public List<Room> GetRooms(User user, DateTime startTime, DateTime endTime)
         {
-            var meetings = _meetingService.GetMeetings(user, startTime, endTime);
-            return rooms.Where(r => !meetings.Any(m => m.Room.Id == r.Id)).ToList();
+            var occupiedRoomIds = _meetingService.GetMeetings(user, startTime, endTime).Select(m => m.Room.Id);
+            return _context.Rooms.Where(r => !occupiedRoomIds.Any(id => id == r.Id)).ToList();
         }
 
         /// <summary>
@@ -46,7 +47,7 @@ namespace AwesomeSoft.Meet.Services
         /// <returns>A generic list of <see cref="Room"/>s.</returns>
         public Room GetRoomById(uint id)
         {
-            return rooms.FirstOrDefault(r => r.Id == id);
+            return _context.Rooms.FirstOrDefault(r => r.Id == id);
         }
 
         /// <summary>
@@ -55,9 +56,8 @@ namespace AwesomeSoft.Meet.Services
         /// <returns>The new <see cref="Room"/> with its assigned ID.</returns>
         public Room Add(Room room)
         {
-            // Handle adding to data store using DBContext or similar.
-            room.Id = (uint)rand.Next(1, int.MaxValue); // Sets a dummy ID since no database is present.
-            rooms.Add(room);
+            _context.Rooms.Add(room);
+            _context.SaveChanges();
             return room;
         }
 
@@ -68,8 +68,9 @@ namespace AwesomeSoft.Meet.Services
         public Room Update(Room room)
         {
             // Save data to database.
-            rooms[rooms.IndexOf(GetRoomById(room.Id))] = room;
-            return GetRoomById(room.Id);
+            _context.Rooms.Update(room);
+            _context.SaveChanges();
+            return room;
         }
 
         /// <summary>
@@ -77,7 +78,8 @@ namespace AwesomeSoft.Meet.Services
         /// </summary>
         public void Delete(Room room)
         {
-            rooms.Remove(room);
+            _context.Rooms.Remove(room);
+            _context.SaveChanges();
         }
         #endregion
     }

@@ -10,6 +10,11 @@ using System;
 using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using AwesomeSoft.Meet.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using Microsoft.Data.Sqlite;
+using System.Linq;
 
 namespace AwesomeSoft.Meet
 {
@@ -48,10 +53,15 @@ namespace AwesomeSoft.Meet
                 c.IncludeXmlComments(xmlPath);
             });
 
+            var keepAliveConnection = new SqliteConnection("DataSource=:memory:");
+            keepAliveConnection.Open();
+
+            services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlite(keepAliveConnection));
+
             // Add simplified User service.
             services.AddScoped<IUserService, UserService>();
-            services.AddSingleton<MeetingService>(); // Added as singleton to preserve state.
-            services.AddSingleton<RoomService>(); // Added as singleton to preserve state.
+            services.AddScoped<MeetingService>();
+            services.AddScoped<RoomService>();
 
             services.AddRazorPages();
 
@@ -74,8 +84,15 @@ namespace AwesomeSoft.Meet
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles(); //
-            app.UseSpaStaticFiles(); //
+            app.UseStaticFiles();
+            app.UseSpaStaticFiles();
+
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+                context.Database.EnsureCreated();
+                DbSeeder.AddTestDataAsync(context).Wait(); // Seed InMemory database with test data.
+            }
 
             app.UseRouting();
 

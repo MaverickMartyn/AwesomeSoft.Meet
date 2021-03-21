@@ -3,14 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AwesomeSoft.Meet.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace AwesomeSoft.Meet.Services
 {
     public class MeetingService
     {
-        // Dummy data container
-        private readonly List<Meeting> meetings = DummyData.Instance.Meetings;
-        private readonly Random rand = new Random();
+        private readonly ApplicationDbContext _context;
+
+        public MeetingService(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
         #region Methods
         /// <summary>
@@ -18,9 +22,9 @@ namespace AwesomeSoft.Meet.Services
         /// </summary>
         /// <param name="user">The user.</param>
         /// <returns>A List of all <see cref="Meeting"/>s attended by this user.</returns>
-        public List<Meeting> GetMeetings(User user)
+        public IQueryable<Meeting> GetMeetings(User user)
         {
-            return meetings.Where(m => m.Owner.Id == user.Id || m.Participants.Any(p => p.Id == user.Id)).ToList();
+            return _context.Meetings.Include(m => m.Room).Include(m => m.Participants).Where(m => m.Owner.Id == user.Id || m.Participants.Any(p => p.Id == user.Id));
         }
 
         /// <summary>
@@ -41,7 +45,7 @@ namespace AwesomeSoft.Meet.Services
         /// <returns>A collection of <see cref="Meeting"/>s.</returns>
         public List<Meeting> GetAllMeetings()
         {
-            return meetings.ToList();
+            return _context.Meetings.ToList();
         }
 
         /// <summary>
@@ -77,9 +81,9 @@ namespace AwesomeSoft.Meet.Services
         /// <returns>Returns the given object, with an added ID, if successful.</returns>
         public Meeting Add(Meeting meeting)
         {
-            // Handle adding to data store using DBContext or similar.
-            meeting.Id = (uint)rand.Next(1, int.MaxValue); // Sets a dummy ID since no database is present.
-            meetings.Add(meeting);
+            _context.Meetings.Add(meeting);
+            _context.SaveChanges();
+            var newMeeting = _context.Meetings.FirstOrDefault(m => m.Id == meeting.Id);
             return meeting;
         }
 
@@ -90,7 +94,7 @@ namespace AwesomeSoft.Meet.Services
         /// <returns>The requested <see cref="Meeting"/> or null.</returns>
         public Meeting GetMeetingById(uint id)
         {
-            return meetings.FirstOrDefault(m => m.Id == id);
+            return _context.Meetings.FirstOrDefault(m => m.Id == id);
         }
 
         /// <summary>
@@ -101,8 +105,9 @@ namespace AwesomeSoft.Meet.Services
         public Meeting Update(Meeting meeting)
         {
             // Save data to database.
-            meetings[meetings.IndexOf(GetMeetingById(meeting.Id))] = meeting;
-            return GetMeetingById(meeting.Id);
+            _context.Meetings.Update(meeting);
+            _context.SaveChanges();
+            return meeting;
         }
 
         /// <summary>
@@ -111,7 +116,8 @@ namespace AwesomeSoft.Meet.Services
         /// <param name="meeting">The <see cref="Meeting"/> to delete.</param>
         public void Delete(Meeting meeting)
         {
-            meetings.Remove(meeting);
+            _context.Meetings.Remove(meeting);
+            _context.SaveChanges();
         }
         #endregion
     }
