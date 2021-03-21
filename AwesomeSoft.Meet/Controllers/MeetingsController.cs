@@ -19,17 +19,14 @@ namespace AwesomeSoft.Meet.Controllers
     [Produces("application/json")]
     public class MeetingsController : ControllerBase
     {
-        private readonly ILogger<MeetingsController> _logger;
         private readonly IUserService _userService;
         private readonly MeetingService _meetingService;
         private readonly RoomService _roomService;
 
-        public MeetingsController(ILogger<MeetingsController> logger,
-            IUserService userService,
+        public MeetingsController(IUserService userService,
             MeetingService meetingService,
             RoomService roomService)
         {
-            _logger = logger;
             _userService = userService;
             _meetingService = meetingService;
             _roomService = roomService;
