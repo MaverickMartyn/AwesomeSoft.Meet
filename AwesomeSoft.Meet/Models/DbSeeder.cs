@@ -48,27 +48,53 @@ namespace AwesomeSoft.Meet.Models
             };
             context.Rooms.AddRange(rooms);
             context.SaveChanges();
-
             var meetings = new List<Meeting>()
             {
                 new Meeting() {
-                    Id = 1,
-                    Title = "Test meeting 1",
-                    Description = "This is just a test meeting.\nNothing to see here.",
+                    Title = "SCRUM Meeting",
+                    Description = "Get the workers working.\nWhip them if necessary.",
                     // Explicit OrderBy Id at all FirstOrDefault calls since SQLite requires it.
-                    Owner = await context.Users.OrderBy(u => u.Id).FirstOrDefaultAsync(),
-                    Room = await context.Rooms.OrderBy(r => r.Id).FirstOrDefaultAsync()
+                    Owner = context.Users.OrderBy(u => u.Id).First(u => u.Name == "User1"), // User 1 created this and is the only participant.
+                    StartTime = DateTime.Today.Add(new TimeSpan(12, 30, 0)).AddDays(1),
+                    EndTime = DateTime.Today.Add(new TimeSpan(14, 30, 0)).AddDays(1),
+                    Room = context.Rooms.OrderBy(r => r.Id).First(),
+                    Participants = new List<User>()
                 },
                 new Meeting() {
-                    Id = 2,
-                    Title = "Test meeting 2",
-                    Description = "This is just a another test meeting.\nNothing to see here.",
-                    Owner = await context.Users.OrderBy(u => u.Id).LastOrDefaultAsync(),
+                    Title = "BestBusiness Aps meeting",
+                    Description = "Contract talks with BestBusiness Aps.\nRemember cookies and subliminal messaging.\nMake sure User2 participates",
+                    Owner = context.Users.OrderBy(u => u.Id).First(u => u.Name == "User1"), // User 1 created this.
+                    StartTime = DateTime.Today.Add(new TimeSpan(13, 30, 0)),
+                    EndTime = DateTime.Today.Add(new TimeSpan(15, 30, 0)),
                     Participants = new List<User>()
                     {
-                        await context.Users.OrderBy(u => u.Id).FirstOrDefaultAsync(),
+                        context.Users.OrderBy(u => u.Id).First(u => u.Name == "User2"), // User 2 participates.
                     },
-                    Room = await context.Rooms.OrderBy(r => r.Id).FirstOrDefaultAsync()
+                    Room = context.Rooms.OrderBy(r => r.Id).First()
+                },
+                new Meeting() {
+                    Title = "Conflict resolution 101",
+                    Description = "This is supposed to conflict with the BestBusiness Aps meeting.\nIf it doesn't, something is wrong.",
+                    Owner = context.Users.OrderBy(u => u.Id).First(u => u.Name == "User2"), // User 2 created this.
+                    StartTime = DateTime.Today.Add(new TimeSpan(12, 00, 0)),
+                    EndTime = DateTime.Today.Add(new TimeSpan(14, 00, 0)),
+                    Participants = new List<User>()
+                    {
+                        context.Users.OrderBy(u => u.Id).First(u => u.Name == "User1"), // User 1 participates.
+                    },
+                    Room = context.Rooms.OrderBy(r => r.Id).First()
+                },
+                new Meeting() {
+                    Title = "Emergency Meeting",
+                    Description = "This is important.\nRemember to join me User1!",
+                    Owner = context.Users.OrderBy(u => u.Id).First(u => u.Name == "User2"), // User 2 created this.
+                    StartTime = DateTime.Today.Add(new TimeSpan(12, 00, 0)),
+                    EndTime = DateTime.Today.Add(new TimeSpan(14, 00, 0)),
+                    Participants = new List<User>()
+                    {
+                        context.Users.OrderBy(u => u.Id).First(u => u.Name == "User1"), // User 1 participates.
+                    },
+                    Room = context.Rooms.OrderBy(r => r.Id).First()
                 }
             };
             context.Meetings.AddRange(meetings);
