@@ -52,7 +52,7 @@ namespace AwesomeSoft.Meet.Services
         {
             foreach (Meeting meeting in meetings)
             {
-                var conflictingMeetings = meetings.Where(m => m.Id != meeting.Id && ((m.StartTime >= meeting.StartTime && m.StartTime <= meeting.EndTime) || (m.EndTime <= meeting.EndTime && m.StartTime >= meeting.StartTime)));
+                var conflictingMeetings = meetings.Where(m => m.Id != meeting.Id && ((m.StartTime >= meeting.StartTime && m.StartTime <= meeting.EndTime) || (m.EndTime <= meeting.EndTime && m.EndTime >= meeting.StartTime)));
                 if (conflictingMeetings.Any())
                 {
                     meeting.ConflictingIds = conflictingMeetings.Select(cm => cm.Id);
