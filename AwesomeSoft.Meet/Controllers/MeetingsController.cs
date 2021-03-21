@@ -86,7 +86,7 @@ namespace AwesomeSoft.Meet.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (!_roomService.GetRooms(_userService.GetCurrentUser(HttpContext), model.StartTime, model.EndTime).Any(r => r.Id == model.RoomId))
+                if (!_roomService.GetRooms(model.StartTime, model.EndTime).Any(r => r.Id == model.RoomId))
                 {
                     return BadRequest("Room unavailable.");
                 }
@@ -125,7 +125,7 @@ namespace AwesomeSoft.Meet.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (!_roomService.GetRooms(_userService.GetCurrentUser(HttpContext), model.StartTime, model.EndTime).Any(r => r.Id == model.RoomId))
+                if (!_roomService.GetRooms(model.StartTime, model.EndTime, model.Id).Any(r => r.Id == model.RoomId))
                 {
                     return BadRequest(new { message = "Room unavailable." });
                 }

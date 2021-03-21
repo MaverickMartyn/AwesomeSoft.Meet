@@ -24,14 +24,17 @@ namespace AwesomeSoft.Meet
 
         #region Actions
         /// <summary>
-        /// Gets all the possible <see cref="Room"/>s.
+        /// Gets all the unoccupied <see cref="Room"/>s in a given date range.
         /// </summary>
+        /// <param name="startTime">The inclusive start of the date range.</param>
+        /// <param name="endTime">The inclusive end of the date range.</param>
+        /// <param name="ignoredId">Id of a room to skip checking, in order to avoid the current room being excluded when editing.</param>
         /// <returns>A collection of <see cref="Room"/>s.</returns>
-        [HttpGet("api/[controller]/{startTime}/{endTime}")]
+        [HttpGet("api/[controller]/{startTime}/{endTime}/{ignoredId?}")]
         [ProducesResponseType(typeof(IEnumerable<Room>), StatusCodes.Status200OK)]
-        public IActionResult Get(DateTime startTime, DateTime endTime)
+        public IActionResult Get(DateTime startTime, DateTime endTime, uint ignoredId = 0)
         {
-            return Ok(_roomService.GetRooms(_userService.GetCurrentUser(HttpContext), startTime, endTime));
+            return Ok(_roomService.GetRooms(startTime, endTime, ignoredId));
         }
 
         /// <summary>

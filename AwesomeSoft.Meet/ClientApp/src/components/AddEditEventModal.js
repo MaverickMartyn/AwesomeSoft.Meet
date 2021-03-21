@@ -34,15 +34,20 @@ export class AddEditEventModal extends Component {
     componentDidUpdate(prevProps) {
         if (prevProps.eventToEdit !== this.props.eventToEdit && !!this.props.eventToEdit) {
             this.getUsers();
-            this.getRooms();
             let event = this.props.eventToEdit;
             event.participantIds = event.participants.map((value) => value.id.toString());
             event.roomId = event.room && event.room.id;
-            this.setState(this.props.eventToEdit);
+            this.setState(this.props.eventToEdit, () => {
+                this.getRooms();
+            });
+        }
+        else if (!this.props.eventToEdit && this.state.id > 0) {
+            this.setState(this.emptyEvent);
         }
     }
 
     emptyEvent = {
+        id: 0,
         title: "",
         description: "",
         startTime: moment().toISOString(),
@@ -102,7 +107,9 @@ export class AddEditEventModal extends Component {
     }
 
     getRooms() {
-        axios.get("/api/Room/" + moment(this.state.startTime).toISOString() + "/" + moment(this.state.endTime).toISOString(),
+        axios.get("/api/Room/" + moment(this.state.startTime).toISOString() + "/"
+            + moment(this.state.endTime).toISOString()
+            + ((this.state.id > 0) ? '/' + this.state.id : ''),
             { headers: { 'Authorization': 'Bearer ' + this.props.user.token } })
             .then((resp) => {
                 this.setState({ availableRooms: resp.data });

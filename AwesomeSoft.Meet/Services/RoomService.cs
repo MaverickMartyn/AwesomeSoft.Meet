@@ -8,13 +8,10 @@ namespace AwesomeSoft.Meet.Services
 {
     public class RoomService
     {
-        private readonly MeetingService _meetingService;
         private readonly ApplicationDbContext _context;
 
-        public RoomService(MeetingService meetingService,
-            ApplicationDbContext context)
+        public RoomService(ApplicationDbContext context)
         {
-            _meetingService = meetingService;
             _context = context;
         }
 
@@ -29,15 +26,15 @@ namespace AwesomeSoft.Meet.Services
         }
 
         /// <summary>
-        /// Returns all rooms.
+        /// Returns all available rooms.
         /// </summary>
-        /// <param name="user">The <see cref="User"/>.</param>
         /// <param name="startTime">The start (inclusive) of the date range.</param>
         /// <param name="endTime">The end (inclusive) of the date range.</param>
+        /// <param name="ignoredId">Id of a meeting to ignore. (Used when editing a meeting to avoid the current room showing as occupied).</param>
         /// <returns>A generic list of <see cref="Room"/>s.</returns>
-        public List<Room> GetRooms(User user, DateTime startTime, DateTime endTime)
+        public List<Room> GetRooms(DateTime startTime, DateTime endTime, uint ignoredId = 0)
         {
-            var occupiedRoomIds = _meetingService.GetMeetings(user, startTime, endTime).Select(m => m.Room.Id);
+            var occupiedRoomIds = _context.Meetings.Where(m => m.Id != ignoredId && ((m.StartTime >= startTime && m.StartTime <= endTime) || (m.EndTime >= startTime && m.EndTime <= endTime))).Select(m => m.Room.Id);
             return _context.Rooms.Where(r => !occupiedRoomIds.Any(id => id == r.Id)).ToList();
         }
 

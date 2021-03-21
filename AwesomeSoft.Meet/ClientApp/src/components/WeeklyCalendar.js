@@ -18,11 +18,14 @@ export class WeeklyCalendar extends Component {
 
         this.toggleModal = this.toggleModal.bind(this);
         this.eventModalChangedHandler = this.eventModalChangedHandler.bind(this);
-        this.onClearEventToEditHandler = this.onClearEventToEditHandler.bind(this);
     }
 
     toggleModal() {
-        this.setState({ modal: !this.state.modal })
+        this.setState({ modal: !this.state.modal }, () => {
+            if (!this.state.modal) {
+                this.clearEventToEdit();
+            }
+        })
     }
 
     editEvent(event) {
@@ -34,7 +37,7 @@ export class WeeklyCalendar extends Component {
         this.props.onEventChanged(event)
     }
 
-    onClearEventToEditHandler() {
+    clearEventToEdit() {
         this.setState({ eventToEdit: null });
     }
 
@@ -121,7 +124,7 @@ export class WeeklyCalendar extends Component {
                         {currentTimeBar}
                     </div>
                 </div>
-                <AddEditEventModal eventToEdit={this.state.eventToEdit} onClearEventToEdit={this.onClearEventToEditHandler} onChange={this.eventModalChangedHandler} show={this.state.modal} user={this.props.user} onToggleChange={(arg) => this.setState({ modal: arg })} />
+                <AddEditEventModal eventToEdit={this.state.eventToEdit} onChange={this.eventModalChangedHandler} show={this.state.modal} user={this.props.user} onToggleChange={this.toggleModal} />
             </div>
         );
     }
