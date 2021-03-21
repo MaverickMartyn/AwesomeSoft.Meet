@@ -46,7 +46,7 @@ export class AddEditEventModal extends Component {
         title: "",
         description: "",
         startTime: moment().toISOString(),
-        endTime: moment().toISOString(),
+        endTime: moment().add(1, 'h').toISOString(),
         participantIds: []
     }
 
@@ -172,7 +172,7 @@ export class AddEditEventModal extends Component {
                             <Label for="end-time">End time</Label><br />
                             <DatePicker
                                 name="end-time"
-                                selected={(this.state.endTime === this.state.startTime) ? moment(this.state.endTime).add(1, 'h').toDate() : moment(this.state.endTime).toDate()}
+                                selected={moment(this.state.endTime).toDate()}
                                 onChange={date => this.updateDate(date, "endTime")}
                                 selectsEnd
                                 startDate={moment(this.state.startTime).toDate()}

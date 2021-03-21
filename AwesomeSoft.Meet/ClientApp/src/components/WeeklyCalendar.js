@@ -35,14 +35,14 @@ export class WeeklyCalendar extends Component {
     }
 
     onClearEventToEditHandler() {
-        this.state.eventToEdit = null;
+        this.setState({ eventToEdit: null });
     }
 
     render() {
         let days = [];
         for (let i = 1; i < 8; i++) {
-            days.push(<div key={i} className={"day" + ((moment().isSame(this.props.startDate.isoWeekday(i), 'day')) ? " current" : "")}>
-                {this.props.startDate && this.props.startDate.isoWeekday(i).format("ddd D")}
+            days.push(<div key={i} className={"day" + ((moment().isSame(moment(this.props.startDate).isoWeekday(i), 'day')) ? " current" : "")}>
+                {this.props.startDate && moment(this.props.startDate).isoWeekday(i).format("ddd D")}
             </div>)
         }
 
@@ -79,7 +79,7 @@ export class WeeklyCalendar extends Component {
                         gridRow: ((start.hour() + 1) + "/span " + timeSpan),
                         width: ((event.conflictingIds && event.conflictingIds.length > 0) ? 100 / (event.conflictingIds.length + 1) + '%' : '100%')
                     }}>
-                    <span className="title">{event.title}</span><span className="buttons"><BsPencilSquare onClick={() => this.editEvent(event)} /><BsFillTrashFill onClick={() => this.onEventDeleted(event)} /></span>
+                    <span className="title">{event.title}</span><span className="buttons"><BsPencilSquare onClick={() => this.editEvent(event)} /><BsFillTrashFill onClick={() => this.props.onEventDeleted(event)} /></span>
                     <p>Room: {event.room && event.room.name}</p>
                     <p>{event.description}</p>
                 </div>)
